@@ -16,20 +16,19 @@ import config from './config';
 // console.log(config);
 export const globalRequest = (url, method, data, power) => {
 	return new Promise((resolve, reject) => {
-        uni
-            .request({
-                url: config.baseUrl + url,
-                method,
-                data,
-                // dataType: ''
-            })
-            .then((response) => {
-                console.log(response);
-                const [, res] = response;
-                resolve(res.data);
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    })
+		uni
+			.request({
+				url: config.baseUrl + url,
+				method,
+				data,
+				// dataType: ''
+			})
+			.then((response) => {
+				const [, res] = response;
+				resolve(res.data);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
 };

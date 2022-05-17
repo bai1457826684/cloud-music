@@ -50,7 +50,7 @@
   "dependencies": {
     "@dcloudio/uni-app-plus": "^2.0.1-34720220422002",
     "@dcloudio/uni-h5": "^2.0.1-34720220422002",
-    "@dcloudio/uni-helper-json": "*",
+    "@dcloudio/uni-helper-json": "^1.0.13",
     "@dcloudio/uni-i18n": "^2.0.1-34720220422002",
     "@dcloudio/uni-mp-360": "^2.0.1-34720220422002",
     "@dcloudio/uni-mp-alipay": "^2.0.1-34720220422002",
@@ -86,6 +86,8 @@
     "@dcloudio/vue-cli-plugin-uni-optimize": "^2.0.1-34720220422002",
     "@dcloudio/webpack-uni-mp-loader": "^2.0.1-34720220422002",
     "@dcloudio/webpack-uni-pages-loader": "^2.0.1-34720220422002",
+    "@types/html5plus": "^1.0.2",
+    "@types/uni-app": "^1.4.4",
     "@vue/cli-plugin-babel": "~4.5.17",
     "@vue/cli-service": "~4.5.17",
     "babel-plugin-import": "^1.11.0",
@@ -94,6 +96,7 @@
     "mini-types": "*",
     "miniprogram-api-typings": "*",
     "postcss-comment": "^2.0.0",
+    "sass": "^1.51.0",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [

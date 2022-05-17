@@ -1,0 +1,9 @@
+{
+	// 保存代码时自动修复
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+
+	// 保存代码时自动格式化
+	"editor.formatOnSave": true
+}

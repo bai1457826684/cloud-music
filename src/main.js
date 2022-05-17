@@ -1,11 +1,16 @@
-import Vue from 'vue'
-import App from './App'
+import Vue from 'vue';
+import App from './App';
+import * as global from './common/global.js';
+import './style/mixin.scss';
+// import nodeSass from 'node-sass'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-App.mpType = 'app'
+Vue.prototype.$global = global;
+
+App.mpType = 'app';
 
 const app = new Vue({
-  ...App
-})
-app.$mount()
+	...App,
+});
+app.$mount();

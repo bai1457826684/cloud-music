@@ -1,0 +1,5 @@
+@mixin bgImage($name) {
+	background-image: url('~@/static/' + $name);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
