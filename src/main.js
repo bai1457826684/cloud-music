@@ -3,6 +3,7 @@ import App from './App';
 import * as global from './common/global.js';
 import './style/mixin.scss';
 // import nodeSass from 'node-sass'
+import './style/iconfont.css';
 
 Vue.config.productionTip = false;
 
