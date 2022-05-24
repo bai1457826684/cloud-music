@@ -35,7 +35,13 @@
 					</view>
 				</view>
 				<view class="list">
-					<song-sheet :url="item.picUrl" :playCount="item.playCount" :name="item.name" v-for="item in playList" :key="item.id"></song-sheet>
+					<SongSheet
+						:url="item.picUrl"
+						:playCount="item.playCount"
+						:name="item.name"
+						v-for="item in playList.slice(0, 10)"
+						:key="item.id"
+					></SongSheet>
 				</view>
 			</view>
 		</view>
@@ -44,11 +50,11 @@
 
 <script>
 import { banner, homepageBall, personalized } from '@/api/home.js';
-import songSheet from '@/components/song-sheet';
+import SongSheet from '@/components/song-sheet';
 
 export default {
 	components: {
-		songSheet,
+		SongSheet,
 	},
 
 	data() {
@@ -56,8 +62,8 @@ export default {
 			swiperOptions: {
 				indicatorDots: true,
 				autoplay: true,
-				interval: 10000,
-				duration: 800,
+				interval: 7000,
+				duration: 600,
 			},
 			// banner
 			banners: [],
