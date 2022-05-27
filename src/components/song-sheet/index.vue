@@ -43,6 +43,8 @@ export default {
 	width: 200rpx;
 	margin-right: 20rpx;
 	margin-bottom: 20rpx;
+	font-size: 0;
+
 	&::before {
 		content: '';
 		position: absolute;
@@ -56,6 +58,7 @@ export default {
 		background-color: #3e3e3e;
 		overflow: hidden;
 	}
+
 	.play-count {
 		position: absolute;
 		right: 6rpx;
@@ -66,21 +69,26 @@ export default {
 		color: #fff;
 		border-radius: 15rpx;
 		background-color: rgba($color: #fff, $alpha: 0.28);
+
 		.icon-play {
 			font-size: 20rpx;
 			margin-right: 8rpx;
 		}
 	}
+
 	image {
 		width: 200rpx;
 		height: 200rpx;
 		margin-top: 6rpx;
 		border-radius: 15rpx;
 	}
+
 	.name {
 		font-size: 24rpx;
 		line-height: 30rpx;
+		height: 60rpx;
 		color: #fff;
+		margin-top: 14rpx;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		overflow: hidden;

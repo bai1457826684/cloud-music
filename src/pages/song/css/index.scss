@@ -1,0 +1,114 @@
+@import '@/style/mixin.scss';
+
+.song {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: $uni-bg-color;
+
+	.middle {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		flex: 1;
+
+		.pic {
+			width: 300rpx;
+			height: 300rpx;
+			border-radius: 50%;
+		}
+	}
+
+	.controls {
+		width: 100vw;
+		height: 200rpx;
+
+		&-top {
+			display: flex;
+			align-items: center;
+			justify-content: space-evenly;
+
+			.time {
+				text-align: center;
+				width: 80rpx;
+				font-size: 24rpx;
+				color: #f1f1f1;
+				line-height: 30rpx;
+			}
+
+			.process-box {
+				position: relative;
+				width: 530rpx;
+				height: 4rpx;
+				border-radius: 2rpx;
+				background-color: #585858;
+				// overflow: hidden;
+
+				.process {
+					position: absolute;
+					width: 0;
+					height: 100%;
+					border-radius: 2rpx;
+					background-color: #8b8b8b;
+
+					&::after {
+						content: '';
+						position: absolute;
+						top: 50%;
+						right: 0;
+						transform: translateY(-50%);
+						width: 10rpx;
+						height: 10rpx;
+						border-radius: 50%;
+						background-color: #f1f1f1;
+					}
+				}
+			}
+		}
+
+		&-bottom {
+			display: flex;
+			align-items: center;
+			justify-content: space-evenly;
+			margin-top: 40rpx;
+
+			.box {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				.icon-prev {
+					font-size: 32rpx;
+					color: #f1f1f1;
+
+					&.next {
+						transform: rotateY(180deg);
+					}
+				}
+
+				.play {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 72rpx;
+					height: 72rpx;
+					margin: 0 40rpx;
+					border-radius: 50%;
+					color: #f1f1f1;
+					border: 4rpx solid;
+
+					.iconfont {
+						font-size: 42rpx;
+
+						&.icon-play {
+							font-size: 32rpx;
+							margin-left: 6rpx;
+						}
+					}
+				}
+			}
+		}
+	}
+}

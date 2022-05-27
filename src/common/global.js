@@ -19,6 +19,7 @@ export const browser = {
 	language: (navigator.browserLanguage || navigator.language).toLowerCase(),
 };
 
+// 用户端类型
 export const phoneType = browser.versions.android ? 1 : browser.versions.iPhone ? 2 : browser.versions.iPad ? 3 : 0;
 
 /**
@@ -29,7 +30,6 @@ export const phoneType = browser.versions.android ? 1 : browser.versions.iPhone 
  * @return {String} XX / XX万 / XX亿
  */
 export const formatNumber = (num, fixed = 0) => {
-	console.log();
 	let res = num;
 	let unit = '';
 
@@ -45,4 +45,17 @@ export const formatNumber = (num, fixed = 0) => {
 	res = Number(res) + unit;
 
 	return res;
+};
+
+/**
+ *
+ * Scheme URL跳转方法
+ * @param {String} url Scheme URL
+ * @return {Boolean} 跳转状态
+ */
+export const openSchemeUrl = (url) => {
+	if (!url || typeof url !== 'string') return false;
+
+	window.open(url, '_blank');
+	return true;
 };
