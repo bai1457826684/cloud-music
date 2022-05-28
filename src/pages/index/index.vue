@@ -10,14 +10,14 @@
 					:interval="swiperOptions.interval"
 					:duration="swiperOptions.duration"
 				>
-					<swiper-item v-for="banner in banners" :key="banner.bannerId">
+					<swiper-item v-for="banner in banners" :key="banner.bannerId" @click="clickBanner(banner)">
 						<image :src="banner.pic" mode="widthFix"></image>
 					</swiper-item>
 				</swiper>
 			</view>
 			<!-- ball -->
 			<view class="ball">
-				<view class="item" v-for="item in ballList" :key="item.id">
+				<view class="item" v-for="item in ballList" :key="item.id" @click="$global.openSchemeUrl(item.url)">
 					<view class="cell"><image :src="item.iconUrl" mode=""></image></view>
 					<view class="text">{{ item.name }}</view>
 				</view>
@@ -35,20 +35,30 @@
 					</view>
 				</view>
 				<view class="list">
-					<song-sheet :url="item.picUrl" :playCount="item.playCount" :name="item.name" v-for="item in playList" :key="item.id"></song-sheet>
+					<SongSheet
+						:url="item.picUrl"
+						:playCount="item.playCount"
+						:name="item.name"
+						v-for="item in playList.slice(0, 10)"
+						:key="item.id"
+					></SongSheet>
 				</view>
 			</view>
 		</view>
+
+		<!-- <view class="module">
+
+    </view> -->
 	</view>
 </template>
 
 <script>
 import { banner, homepageBall, personalized } from '@/api/home.js';
-import songSheet from '@/components/song-sheet';
+import SongSheet from '@/components/song-sheet';
 
 export default {
 	components: {
-		songSheet,
+		SongSheet,
 	},
 
 	data() {
@@ -56,8 +66,8 @@ export default {
 			swiperOptions: {
 				indicatorDots: true,
 				autoplay: true,
-				interval: 10000,
-				duration: 800,
+				interval: 7000,
+				duration: 600,
 			},
 			// banner
 			banners: [],
@@ -69,6 +79,7 @@ export default {
 	},
 
 	onLoad() {
+		// this.$store.dispatch('playSong', {});
 		// banner
 		banner({ type: this.$global.phoneType }).then((res) => {
 			if (res.code === 200) {
@@ -91,7 +102,19 @@ export default {
 		});
 	},
 
-	methods: {},
+	methods: {
+		// banner跳转
+		clickBanner(banner) {
+			console.log(banner);
+			if (banner.targetType === 1 && banner.song) {
+				this.$store.dispatch('playSong', banner.song);
+				// return;
+				uni.navigateTo({
+					url: `/pages/song/index?ids=${banner.targetId}`,
+				});
+			}
+		},
+	},
 };
 </script>
 
