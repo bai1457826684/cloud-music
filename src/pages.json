@@ -5,6 +5,14 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "云音乐",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/play-list/detail/index",
+			"style": {
+				"navigationBarTitleText": "歌单",
 				"navigationStyle": "custom"
 			}
 		},

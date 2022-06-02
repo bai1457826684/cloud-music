@@ -19,7 +19,7 @@
 		.line {
 			width: 100%;
 			height: 1rpx;
-			background-color: #5a5a5a;
+			background-color: rgba($color: #5a5a5a, $alpha: 0.38);
 		}
 	}
 
@@ -33,6 +33,26 @@
 			height: 268rpx;
 			border-radius: 15rpx;
 			overflow: hidden;
+
+			.swiper-item {
+				position: relative;
+
+				.title {
+					position: absolute;
+					bottom: 0;
+					right: 0;
+					font-size: 20rpx;
+					line-height: 40rpx;
+					color: #ffffff;
+					padding: 0 20rpx;
+					border-top-left-radius: 20rpx;
+					background-color: #0d7fdd;
+
+					&.red {
+						background-color: #e05744;
+					}
+				}
+			}
 		}
 
 		image {
@@ -102,15 +122,8 @@
 				border-radius: 30rpx;
 				border: 1px solid #eee;
 
-				// span {
-				// 	vertical-align: middle;
-				// }
-
-				.icon {
-					display: inline-block;
-					width: 36rpx;
-					height: 36rpx;
-					@include bgImage('arrow-right.png');
+				.icon-arrow-right {
+					font-size: 36rpx;
 				}
 			}
 		}
@@ -119,6 +132,11 @@
 			display: flex;
 			overflow-y: auto;
 			min-height: 280rpx;
+
+			.cell {
+				margin-right: 20rpx;
+				margin-bottom: 20rpx;
+			}
 		}
 	}
 }

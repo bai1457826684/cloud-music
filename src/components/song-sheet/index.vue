@@ -3,7 +3,7 @@
 		<image :src="url" mode=""></image>
 		<!-- 右上角播放数 -->
 		<view class="play-count"><span class="iconfont icon-play"></span> {{ $global.formatNumber(playCount) }}</view>
-		<view class="name">{{ name }}</view>
+		<view class="name" v-if="name">{{ name }}</view>
 	</view>
 </template>
 
@@ -37,12 +37,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/style/mixin.scss';
 .cell {
 	position: relative;
 	width: 200rpx;
-	margin-right: 20rpx;
-	margin-bottom: 20rpx;
 	font-size: 0;
 
 	&::before {

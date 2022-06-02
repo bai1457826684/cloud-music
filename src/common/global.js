@@ -56,6 +56,7 @@ export const formatNumber = (num, fixed = 0) => {
 export const openSchemeUrl = (url) => {
 	if (!url || typeof url !== 'string') return false;
 
-	window.open(url, '_blank');
+	// window.open(url, '_blank');
+	window.location.href = url;
 	return true;
 };

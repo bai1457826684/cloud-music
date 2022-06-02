@@ -1,6 +1,9 @@
 <template>
 	<view class="content">
 		<view class="module">
+			<!-- Header -->
+			<Header></Header>
+
 			<!-- banner -->
 			<view class="banner">
 				<swiper
@@ -10,11 +13,13 @@
 					:interval="swiperOptions.interval"
 					:duration="swiperOptions.duration"
 				>
-					<swiper-item v-for="banner in banners" :key="banner.bannerId" @click="clickBanner(banner)">
+					<swiper-item v-for="banner in banners" :key="banner.bannerId" @click="clickBanner(banner)" class="swiper-item">
 						<image :src="banner.pic" mode="widthFix"></image>
+						<div class="title" :class="banner.titleColor" v-if="banner.typeTitle">{{ banner.typeTitle }}</div>
 					</swiper-item>
 				</swiper>
 			</view>
+
 			<!-- ball -->
 			<view class="ball">
 				<view class="item" v-for="item in ballList" :key="item.id" @click="$global.openSchemeUrl(item.url)">
@@ -31,7 +36,7 @@
 					<view class="left">推荐歌单</view>
 					<view class="right">
 						<span>更多</span>
-						<span class="icon"></span>
+						<span class="iconfont icon-arrow-right"></span>
 					</view>
 				</view>
 				<view class="list">
@@ -41,6 +46,7 @@
 						:name="item.name"
 						v-for="item in playList.slice(0, 10)"
 						:key="item.id"
+						@click.native="clickSongSheet(item.id)"
 					></SongSheet>
 				</view>
 			</view>
@@ -54,11 +60,13 @@
 
 <script>
 import { banner, homepageBall, personalized } from '@/api/home.js';
-import SongSheet from '@/components/song-sheet';
+import SongSheet from '@/components/song-sheet/index.vue';
+import Header from '@/components/header/index.vue';
 
 export default {
 	components: {
 		SongSheet,
+		Header,
 	},
 
 	data() {
@@ -66,8 +74,8 @@ export default {
 			swiperOptions: {
 				indicatorDots: true,
 				autoplay: true,
-				interval: 7000,
-				duration: 600,
+				interval: 54000,
+				duration: 400,
 			},
 			// banner
 			banners: [],
@@ -79,30 +87,38 @@ export default {
 	},
 
 	onLoad() {
-		// this.$store.dispatch('playSong', {});
-		// banner
-		banner({ type: this.$global.phoneType }).then((res) => {
-			if (res.code === 200) {
-				this.banners = res.banners;
-			}
-		});
+		this.initPage();
+	},
 
-		// 圆形图标列表
-		homepageBall().then((res) => {
-			if (res.code === 200) {
-				this.ballList = res.data;
-			}
-		});
-
-		// 推荐歌单
-		personalized().then((res) => {
-			if (res.code === 200) {
-				this.playList = res.result;
-			}
-		});
+	onPullDownRefresh() {
+		this.initPage();
+		uni.stopPullDownRefresh();
 	},
 
 	methods: {
+		initPage() {
+			// banner
+			banner({ type: this.$global.phoneType }).then((res) => {
+				if (res.code === 200) {
+					this.banners = res.banners;
+				}
+			});
+
+			// 圆形图标列表
+			homepageBall().then((res) => {
+				if (res.code === 200) {
+					this.ballList = res.data;
+				}
+			});
+
+			// 推荐歌单
+			personalized().then((res) => {
+				if (res.code === 200) {
+					this.playList = res.result;
+				}
+			});
+		},
+
 		// banner跳转
 		clickBanner(banner) {
 			console.log(banner);
@@ -114,11 +130,18 @@ export default {
 				});
 			}
 		},
+
+		// 歌单跳转
+		clickSongSheet(id) {
+			console.log(id);
+			uni.navigateTo({
+				url: `/pages/play-list/detail/index?id=${id}`,
+			});
+		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@/style/mixin.scss';
-@import 'css/index.scss';
+@import './css/index.scss';
 </style>

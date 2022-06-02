@@ -4,7 +4,7 @@
 		"types": ["@dcloudio/types", "miniprogram-api-typings", "mini-types"],
 		"baseUrl": "./",
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["./src/*"]
 		}
 	},
 	"vueCompilerOptions": {

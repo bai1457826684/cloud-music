@@ -1,5 +1,12 @@
 @mixin bgImage($name) {
-	background-image: url('~@/static/' + $name);
+	background-image: url('~@/static/'+ $name);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
+}
+
+@mixin ellipsis($line: 1) {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	-webkit-line-clamp: $line;
 }

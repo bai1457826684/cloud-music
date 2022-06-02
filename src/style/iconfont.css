@@ -1,8 +1,8 @@
 @font-face {
 	font-family: 'iconfont'; /* Project id 3412489 */
-	src: url('//at.alicdn.com/t/font_3412489_nfyl9m3zqmf.woff2?t=1653467200657') format('woff2'),
-		url('//at.alicdn.com/t/font_3412489_nfyl9m3zqmf.woff?t=1653467200657') format('woff'),
-		url('//at.alicdn.com/t/font_3412489_nfyl9m3zqmf.ttf?t=1653467200657') format('truetype');
+	src: url('//at.alicdn.com/t/font_3412489_sy4ipcxo4k.woff2?t=1654055544463') format('woff2'),
+		url('//at.alicdn.com/t/font_3412489_sy4ipcxo4k.woff?t=1654055544463') format('woff'),
+		url('//at.alicdn.com/t/font_3412489_sy4ipcxo4k.ttf?t=1654055544463') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
 	font-style: normal;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yinpin:before {
+	content: '\e6ac';
+}
+
+.icon-arrow-left:before {
+	content: '\e743';
+}
+
+.icon-arrow-right:before {
+	content: '\e87d';
+}
+
+.icon-mic:before {
+	content: '\e696';
+}
+
+.icon-menu:before {
+	content: '\e7f4';
 }
 
 .icon-pause:before {

@@ -1,65 +1,90 @@
 <template>
 	<view class="song">
-		<template v-if="songs.length > 0">
-			<view class="middle">
-				<image class="pic" :src="songs[curIndex].al.picUrl" mode="scaleToFill"></image>
-			</view>
+		<!-- 背景模糊效果 -->
+		<div class="mask" :style="{ backgroundImage: `url('${songs[curIndex].al.picUrl}')` }"></div>
 
-			<view class="controls">
-				<template v-if="innerAudioContext">
-					<view class="controls-top">
-						<view class="time">{{ secondToTime(currentTime) }}</view>
-						<view class="process-box">
-							<view class="process" :style="{ width: (currentTime / innerAudioContext.duration) * 100 + '%' }"></view>
-						</view>
-						<view class="time">{{ secondToTime(innerAudioContext.duration) }}</view>
-					</view>
-					<view class="controls-bottom">
-						<view class="box">
-							<view class="prev iconfont icon-prev"></view>
-							<view class="play">
-								<view v-show="!isPlay" class="iconfont icon-play" @click="play()"></view>
-								<view v-show="isPlay" class="iconfont icon-pause" @click="pause()"></view>
-							</view>
-							<view class="next iconfont icon-prev"></view>
-						</view>
+		<div class="content">
+			<!-- Header -->
+			<Header>
+				<template v-slot:navMiddle v-if="songs[curIndex]">
+					<view class="info">
+						<view class="song-name">{{ songs[curIndex].name }}</view>
+						<view class="ar-name">{{ arName }}</view>
 					</view>
 				</template>
-			</view>
-		</template>
+			</Header>
+
+			<template v-if="songs[curIndex]">
+				<view class="middle">
+					<image class="pic" :class="[isPlay ? 'action' : '']" :src="songs[curIndex].al.picUrl" mode="scaleToFill"></image>
+				</view>
+
+				<view class="controls">
+					<template v-if="innerAudioContext">
+						<view class="controls-top">
+							<view class="time">{{ secondToTime(currentTime) }}</view>
+							<view class="process-box">
+								<view class="process" :style="{ width: (currentTime / innerAudioContext.duration) * 100 + '%' }"></view>
+							</view>
+							<view class="time">{{ secondToTime(innerAudioContext.duration) }}</view>
+						</view>
+						<view class="controls-bottom">
+							<view class="box">
+								<view class="prev iconfont icon-prev" @click="songPrev"></view>
+								<view class="play">
+									<view v-show="!isPlay" class="iconfont icon-play" @click="play()"></view>
+									<view v-show="isPlay" class="iconfont icon-pause" @click="pause()"></view>
+								</view>
+								<view class="next iconfont icon-prev" @click="songNext"></view>
+							</view>
+						</view>
+					</template>
+				</view>
+			</template>
+		</div>
 	</view>
 </template>
 
 <script>
-import { songDetail, songUrl } from '@/api/song.js';
-import { PAUSE, PLAY } from '@/store/mutation-type';
+// import { songDetail, songUrl } from '@/api/song.js';
+import { PAUSE, PLAY, SONG_NEXT, SONG_PREV } from '@/store/mutation-types';
 import { mapState, mapMutations } from 'vuex';
+import Header from '@/components/header/index.vue';
 
 export default {
-	data() {
-		return {
-			// songs: [], // 歌曲信息
-			// urls: [], // 歌曲url
-			// curIndex: 0, // 当前歌曲索引
-			// isPlay: false, // 是否正在播放
-			// isCanPlay: false, // 是否可以播放
-			// currentTime: 0, // 当前进度时间 s
-			// // uni api 创建的音频上下文对象
-			// innerAudioContext: null,
-		};
+	components: {
+		Header,
 	},
 
-	computed: mapState({
-		songs: (state) => state.song.songs,
-		curIndex: (state) => state.song.curIndex,
-		isPlay: (state) => state.song.isPlay,
-		isCanPlay: (state) => state.song.isCanPlay,
-		currentTime: (state) => state.song.currentTime,
-		innerAudioContext: (state) => state.song.innerAudioContext,
-	}),
+	data() {
+		return {};
+	},
+
+	computed: {
+		...mapState({
+			songs: (state) => state.song.songs,
+			curIndex: (state) => state.song.curIndex,
+			isPlay: (state) => state.song.isPlay,
+			isCanPlay: (state) => state.song.isCanPlay,
+			currentTime: (state) => state.song.currentTime,
+			innerAudioContext: (state) => state.song.innerAudioContext,
+		}),
+
+		arName: function () {
+			if (!this.songs[this.curIndex]) return '';
+			let names = [];
+			const { ar } = this.songs[this.curIndex];
+			for (const i in ar) {
+				names.push(ar[i].name);
+			}
+			return names.join('/');
+		},
+	},
 
 	onLoad(options) {
-		console.log(this.isCanPlay, this.innerAudioContext.src, this.currentTime, this.innerAudioContext.duration);
+		console.log(this.currentTime, this.innerAudioContext.duration, this.innerAudioContext.src);
+		// setInterval(() => {
+		// }, 1000);
 	},
 
 	onUnload() {
@@ -70,45 +95,9 @@ export default {
 		...mapMutations({
 			play: PLAY,
 			pause: PAUSE,
+			songPrev: SONG_PREV,
+			songNext: SONG_NEXT,
 		}),
-
-		// play() {
-		// 	this.$store.commit(PLAY);
-		// },
-
-		getSong(ids) {
-			return new Promise(async (resolve, reject) => {
-				// 歌曲详情
-				const resDetail = await songDetail({ ids: ids });
-				if (resDetail.code === 200) {
-					this.songs = resDetail.songs;
-					// 歌曲 url
-					const resUrl = await songUrl({ id: ids });
-					if (resUrl.code === 200) {
-						this.urls = resUrl.data;
-						resolve(true);
-					} else {
-						uni.showToast({
-							title: resUrl.message || 'fail',
-						});
-						resolve(false);
-					}
-				} else {
-					uni.showToast({
-						title: resDetail.message || 'fail',
-					});
-					resolve(false);
-				}
-			});
-		},
-
-		// play() {
-		// 	this.innerAudioContext.play();
-		// },
-
-		// pause() {
-		// 	this.innerAudioContext.pause();
-		// },
 
 		formatTime([s, m, h], format = 'hh:mm:ss') {
 			if (h !== undefined || h !== null) {
@@ -121,6 +110,7 @@ export default {
 		},
 
 		secondToTime(second) {
+			second = isNaN(second) ? 0 : second;
 			second = parseInt(second);
 			let res = '';
 			if (second > 3600) {

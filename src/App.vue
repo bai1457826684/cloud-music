@@ -1,5 +1,5 @@
 <script>
-import { INIT_AUDIO } from './store/mutation-type';
+import { INIT_AUDIO } from './store/mutation-types';
 
 export default {
 	onLaunch: function () {
