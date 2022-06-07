@@ -65,6 +65,7 @@ import { songDetail } from '@/api/song';
 import Header from '@/components/header/index.vue';
 import SongSheet from '@/components/song-sheet/index.vue';
 import { mapGetters } from 'vuex';
+import { PLAY, SET_SONGS } from '@/store/mutation-types';
 let observer = null;
 
 export default {
@@ -170,7 +171,9 @@ export default {
 
 		// 播放所有音乐
 		playAll() {
-			this.$store.dispatch('playAllSong', this.list);
+			// this.$store.dispatch('playAllSong', this.list);
+			this.$store.commit(SET_SONGS, this.list);
+			this.$store.commit(PLAY);
 			uni.navigateTo({
 				url: `/pages/song/index`,
 			});

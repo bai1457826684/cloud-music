@@ -7,6 +7,8 @@ import './style/mixin.scss';
 // import nodeSass from 'node-sass'
 import './style/iconfont.css';
 
+vConsole.use();
+
 Vue.config.productionTip = false;
 
 Vue.prototype.$global = global;

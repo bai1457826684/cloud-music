@@ -91,16 +91,28 @@
 				position: relative;
 				width: 530rpx;
 				height: 4rpx;
-				border-radius: 2rpx;
+				border-radius: 4rpx;
 				background-color: rgba($color: #585858, $alpha: 0.38);
 				// overflow: hidden;
 
 				.process {
 					position: absolute;
+					left: 0;
+					top: 50%;
+					transform: translateY(-50%);
 					width: 0;
 					height: 100%;
-					border-radius: 2rpx;
+					border-radius: 4rpx;
 					background-color: #8b8b8b;
+
+					&.active {
+						height: 200%;
+
+						&::after {
+							width: 16rpx;
+							height: 16rpx;
+						}
+					}
 
 					&::after {
 						content: '';

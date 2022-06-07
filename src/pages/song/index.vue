@@ -22,13 +22,28 @@
 				<view class="controls">
 					<template v-if="innerAudioContext">
 						<view class="controls-top">
+							<!-- 时间、进度条 -->
 							<view class="time">{{ secondToTime(currentTime) }}</view>
-							<view class="process-box">
-								<view class="process" :style="{ width: (currentTime / innerAudioContext.duration) * 100 + '%' }"></view>
+							<view
+								ref="processBox"
+								class="process-box"
+								@touchstart="handleMouseDown"
+								@touchend="handleMouseUp"
+								@touchmove="handleMouseMove"
+							>
+								<!-- 进度条 拖动中 -->
+								<view class="process active" v-show="processInfo.active" :style="{ width: processInfo.percent + '%' }"></view>
+								<!-- 进度条 未拖动 -->
+								<view
+									class="process"
+									v-show="!processInfo.active"
+									:style="{ width: (currentTime / innerAudioContext.duration) * 100 + '%' }"
+								></view>
 							</view>
 							<view class="time">{{ secondToTime(innerAudioContext.duration) }}</view>
 						</view>
 						<view class="controls-bottom">
+							<!-- 上一首、播放、下一首 -->
 							<view class="box">
 								<view class="prev iconfont icon-prev" @click="songPrev"></view>
 								<view class="play">
@@ -47,9 +62,10 @@
 
 <script>
 // import { songDetail, songUrl } from '@/api/song.js';
-import { PAUSE, PLAY, SONG_NEXT, SONG_PREV } from '@/store/mutation-types';
+import { PAUSE, PLAY, SET_PROCESS, SONG_NEXT, SONG_PREV } from '@/store/mutation-types';
 import { mapState, mapMutations } from 'vuex';
 import Header from '@/components/header/index.vue';
+import { floorToFixed, getIntervalValue } from '@/common/common';
 
 export default {
 	components: {
@@ -57,7 +73,15 @@ export default {
 	},
 
 	data() {
-		return {};
+		return {
+			// 进度条拖动信息
+			processInfo: {
+				percent: 0,
+				active: false,
+				// 进度条宽度 单位(px)
+				width: 0,
+			},
+		};
 	},
 
 	computed: {
@@ -82,9 +106,15 @@ export default {
 	},
 
 	onLoad(options) {
-		console.log(this.currentTime, this.innerAudioContext.duration, this.innerAudioContext.src);
-		// setInterval(() => {
-		// }, 1000);
+		// console.log(this.currentTime, this.innerAudioContext.duration, this.innerAudioContext.src);
+	},
+
+	onShow() {
+		this.$nextTick(() => {
+			// 获取进度条的宽度
+			const { clientWidth } = this.$refs.processBox.$el;
+			this.processInfo.width = clientWidth;
+		});
 	},
 
 	onUnload() {
@@ -98,6 +128,37 @@ export default {
 			songPrev: SONG_PREV,
 			songNext: SONG_NEXT,
 		}),
+
+		// 进度条 按下事件
+		handleMouseDown(e) {
+			const { currentTarget, changedTouches } = e;
+			const { clientX } = changedTouches[0];
+			const { offsetLeft } = currentTarget;
+			this.processInfo.active = true;
+			const percent = getIntervalValue(((clientX - offsetLeft) / this.processInfo.width) * 100, 0, 100);
+			this.processInfo.percent = floorToFixed(percent);
+		},
+
+		// 进度条 移动
+		handleMouseMove(e) {
+			const { currentTarget, changedTouches } = e;
+			const { clientX } = changedTouches[0];
+			const { offsetLeft } = currentTarget;
+			const percent = getIntervalValue(((clientX - offsetLeft) / this.processInfo.width) * 100, 0, 100);
+			this.processInfo.percent = floorToFixed(percent);
+		},
+
+		// 进度条 松开
+		handleMouseUp(e) {
+			this.processInfo.active = false;
+			const { currentTarget, changedTouches } = e;
+			// 现在的位置
+			const { clientX } = changedTouches[0];
+			// 之前的位置
+			const { offsetLeft } = currentTarget;
+			const diff = clientX - offsetLeft;
+			this.$store.commit(SET_PROCESS, (diff * this.innerAudioContext.duration) / this.processInfo.width);
+		},
 
 		formatTime([s, m, h], format = 'hh:mm:ss') {
 			if (h !== undefined || h !== null) {

@@ -1,3 +1,4 @@
+import { anonimousLogin } from '@/api/user';
 import config from './config';
 
 // uni.request({
@@ -19,6 +20,38 @@ export const globalRequest = (url, method, data, power) => {
 		uni
 			.request({
 				url: config.baseUrl + url,
+				method,
+				data: {
+					...data,
+					timestamp: Date.now(),
+				},
+				// dataType: ''
+			})
+			.then((response) => {
+				console.log('response', response);
+				const [, res] = response;
+				if (res.statusCode === 400) {
+					// 登陆验证
+					anonimousLogin().then((res) => {
+						if (res.code === 200) {
+							console.log('login');
+						}
+					});
+				}
+				resolve(res.data);
+			})
+			.catch((err) => {
+				console.log('err', err);
+				reject(err);
+			});
+	});
+};
+
+export const otherRequest = (url, method, data, power) => {
+	return new Promise((resolve, reject) => {
+		uni
+			.request({
+				url: config.baseUrlOther + url,
 				method,
 				data,
 				// dataType: ''

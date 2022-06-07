@@ -11,3 +11,4 @@ export const SET_AUDIO_URL = 'SET_AUDIO_URL';
 export const SET_SONGS = 'SET_SONGS';
 export const SONGS_DELETE = 'SONGS_DELETE';
 export const CHECK_SONG_URL = 'CHECK_SONG_URL';
+export const SET_PROCESS = 'SET_PROCESS';

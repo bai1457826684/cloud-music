@@ -23,7 +23,6 @@ export const browser = {
 export const phoneType = browser.versions.android ? 1 : browser.versions.iPhone ? 2 : browser.versions.iPad ? 3 : 0;
 
 /**
- *
  * 中文数量格式化 XX万 / XX亿
  * @param {Number} num 需要转换的数
  * @param {Number} fixed 保留小数位数 默认为0
@@ -48,7 +47,6 @@ export const formatNumber = (num, fixed = 0) => {
 };
 
 /**
- *
  * Scheme URL跳转方法
  * @param {String} url Scheme URL
  * @return {Boolean} 跳转状态

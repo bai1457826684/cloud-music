@@ -1,5 +1,5 @@
 // 首页 api
-import { globalRequest } from '../common/request';
+import { globalRequest, otherRequest } from '../common/request';
 
 /**
  * 首页-发现
@@ -27,7 +27,7 @@ export const banner = (data) => {
  * @returns
  */
 export const homepageBall = (data) => {
-	return globalRequest('/homepage/dragon/ball', 'GET');
+	return otherRequest('/homepage/dragon/ball', 'GET');
 };
 
 /**

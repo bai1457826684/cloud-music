@@ -1,4 +1,5 @@
 import { songUrl } from '@/api/song.js';
+import { getIntervalValue } from '@/common/common';
 import {
 	CHECK_SONG_URL,
 	INIT_AUDIO,
@@ -6,6 +7,7 @@ import {
 	PLAY,
 	PLAY_SONG,
 	SET_AUDIO_URL,
+	SET_PROCESS,
 	SET_SONGS,
 	SONGS_DELETE,
 	SONG_NEXT,
@@ -40,10 +42,15 @@ const store = {
 			if (findIndex === -1) {
 				state.songs.splice(state.curIndex, 0, payload);
 				this.commit(SET_SONGS, state.songs);
-				// const { length } = state.songs;
-				// state.curIndex = length - 1;
 			} else {
-				if (state.curIndex === findIndex) return;
+				if (state.curIndex === findIndex) {
+					if (!this.getters.curSong.url) {
+						state.songs[state.curIndex].url = payload.url;
+						this.commit(SET_SONGS, state.songs);
+						this.commit(SET_AUDIO_URL);
+					}
+					return;
+				}
 				state.curIndex = findIndex;
 			}
 			this.commit(SET_AUDIO_URL);
@@ -58,6 +65,7 @@ const store = {
 		// set url
 		[SET_AUDIO_URL](state) {
 			const song = state.songs[state.curIndex];
+			console.log('set url', song.url);
 			if (song) {
 				if (!song.url) {
 					this.dispatch('playSong', song);
@@ -146,6 +154,16 @@ const store = {
 			}
 		},
 
+		// 检查url是否存在 / url是否可用？
+		[CHECK_SONG_URL](state, payload) {
+			if (!state.innerAudioContext.src) {
+				this.commit(SET_AUDIO_URL);
+			}
+		},
+
+		/**
+		 * 音频控制 start
+		 */
 		[PLAY](state) {
 			if (!state.innerAudioContext.src) {
 				this.commit(SET_AUDIO_URL);
@@ -156,6 +174,17 @@ const store = {
 		[PAUSE](state) {
 			state.innerAudioContext.pause();
 		},
+
+		// 设置进度条
+		[SET_PROCESS](state, second) {
+			// second = Math.max(second, 0);
+			// second = Math.min(second, state.innerAudioContext.duration || 0);
+			getIntervalValue(second, 0, state.innerAudioContext.duration || 0);
+			state.innerAudioContext.seek(second);
+		},
+		/**
+		 * 音频控制 end
+		 */
 
 		[SONG_NEXT](state) {
 			state.curIndex++;
@@ -179,7 +208,10 @@ const store = {
 	actions: {
 		// 播放当前音乐
 		playSong({ state, commit, dispatch }, payload) {
-			if (payload.url || state.songs.some((item) => item.id === payload.id)) {
+			const findIndex = state.songs.findIndex((item) => item.id === payload.id);
+			const song = state.songs[findIndex] || {};
+			console.log(payload.url, song.url);
+			if (payload.url || song.url) {
 				commit(PLAY_SONG, payload);
 			} else {
 				dispatch('getSongUrl', payload.id).then((list) => {
@@ -208,14 +240,20 @@ const store = {
 				if (list) {
 					list.forEach((item, index) => {
 						if (item.id === songList[index].id) {
-							songList.url = item.url;
-							songList.br = item.br;
+							songList[index].url = item.url;
+							songList[index].br = item.br;
 						} else {
-							console.log('id匹配错误');
+							const findIndex = songList.findIndex((song) => song.id === item.id);
+							console.log('id匹配错误，findIndex: ', findIndex, ', index:', index);
+							if (findIndex !== -1) {
+								songList[findIndex].url = item.url;
+								songList[findIndex].br = item.br;
+							}
 						}
 					});
 					state.curIndex = 0;
 					commit(SET_SONGS, songList);
+					commit(PLAY);
 				}
 			});
 		},
