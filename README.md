@@ -1,6 +1,10 @@
 # cloud-music
 uniapp 网易云音乐
 
+# Project review url
+dev:  https://cloud-music-jet-dev.vercel.app/#/
+prod: https://cloud-music-jet.vercel.app/#/
+
 ## Project setup
 ```
 yarn install
