@@ -68,10 +68,18 @@ const store = {
 			console.log('set url', song.url);
 			if (song) {
 				if (!song.url) {
-					this.dispatch('playSong', song);
+					this.dispatch('playSong', song).then((res) => {
+						if (res.isError) {
+							this.commit(SONGS_DELETE, { index: state.curIndex });
+							this.commit(SET_AUDIO_URL);
+						}
+					});
 					return;
 				}
 				state.innerAudioContext.src = song.url;
+				if (state.innerAudioContext.autoPlay) {
+					this.commit(PLAY);
+				}
 			}
 		},
 
@@ -130,6 +138,17 @@ const store = {
 					console.log('播放结束');
 					this.commit(SONG_NEXT);
 					// innerAudioContext.src = state.urls[state.curIndex].url;
+				});
+
+				// 添加标题修改监听
+				uni.$on('updateTitle', () => {
+					const { name } = this.getters.curSong;
+					console.log(name);
+					if (name) {
+						uni.setNavigationBarTitle({
+							title: name,
+						});
+					}
 				});
 			}
 		},
@@ -208,23 +227,28 @@ const store = {
 	actions: {
 		// 播放当前音乐
 		playSong({ state, commit, dispatch }, payload) {
-			const findIndex = state.songs.findIndex((item) => item.id === payload.id);
-			const song = state.songs[findIndex] || {};
-			console.log(payload.url, song.url);
-			if (payload.url || song.url) {
-				commit(PLAY_SONG, payload);
-			} else {
-				dispatch('getSongUrl', payload.id).then((list) => {
-					if (!list[0].url) {
-						uni.showToast({
-							title: 'Invalid url',
-							icon: 'none',
-						});
-						return;
-					}
-					commit(PLAY_SONG, { ...payload, url: list[0].url });
-				});
-			}
+			return new Promise((resolve, reject) => {
+				const findIndex = state.songs.findIndex((item) => item.id === payload.id);
+				const song = state.songs[findIndex] || {};
+				if (payload.url || song.url) {
+					commit(PLAY_SONG, payload);
+					resolve({ isError: false, message: 'success' });
+				} else {
+					dispatch('getSongUrl', payload.id).then((list) => {
+						if (!list[0].url) {
+							uni.showToast({
+								title: 'Invalid url',
+								icon: 'none',
+							});
+							state.innerAudioContext.src = '';
+							resolve({ isError: true, message: 'Invalid url' });
+							return;
+						}
+						commit(PLAY_SONG, { ...payload, url: list[0].url });
+						resolve({ isError: false, message: 'success' });
+					});
+				}
+			});
 		},
 
 		// 播放所有音乐

@@ -44,7 +44,7 @@
 						:url="item.picUrl"
 						:playCount="item.playCount"
 						:name="item.name"
-						v-for="item in playList.slice(0, 10)"
+						v-for="item in playList"
 						:key="item.id"
 						@click.native="clickSongSheet(item.id)"
 					></SongSheet>
@@ -112,7 +112,7 @@ export default {
 			});
 
 			// 推荐歌单
-			personalized().then((res) => {
+			personalized({ limit: 10 }).then((res) => {
 				if (res.code === 200) {
 					this.playList = res.result;
 				}

@@ -6,8 +6,10 @@ import store from './store/index.js';
 import './style/mixin.scss';
 // import nodeSass from 'node-sass'
 import './style/iconfont.css';
+// import { addRouterIntercept } from './common/interceptor';
 
 vConsole.use();
+// addRouterIntercept();
 
 Vue.config.productionTip = false;
 

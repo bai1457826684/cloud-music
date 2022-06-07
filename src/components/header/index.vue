@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="left">
 				<slot name="navLeft">
-					<i class="iconfont icon-arrow-left" @click="$router.back()"></i>
+					<i class="iconfont icon-arrow-left" @click="back"></i>
 				</slot>
 			</view>
 
@@ -48,7 +48,11 @@ export default {
 
 	created() {},
 
-	methods: {},
+	methods: {
+		back() {
+			uni.navigateBack();
+		},
+	},
 };
 </script>
 

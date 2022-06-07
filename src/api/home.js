@@ -35,6 +35,6 @@ export const homepageBall = (data) => {
  * @param {Number} limit 取出数量 , 默认为 30 (不支持 offset)
  * @returns
  */
-export const personalized = (data) => {
-	return globalRequest('/personalized', 'GET', data);
+export const personalized = ({ limit }) => {
+	return globalRequest('/personalized', 'GET', { limit });
 };

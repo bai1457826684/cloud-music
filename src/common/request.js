@@ -28,7 +28,6 @@ export const globalRequest = (url, method, data, power) => {
 				// dataType: ''
 			})
 			.then((response) => {
-				console.log('response', response);
 				const [, res] = response;
 				if (res.statusCode === 400) {
 					// 登陆验证
@@ -41,7 +40,6 @@ export const globalRequest = (url, method, data, power) => {
 				resolve(res.data);
 			})
 			.catch((err) => {
-				console.log('err', err);
 				reject(err);
 			});
 	});

@@ -119,7 +119,6 @@ export default {
 	beforeDestroy() {
 		// 解除监听
 		if (observer) {
-			console.log(observer.unobserve, observer.disconnect);
 			observer.unobserve(this.$refs.top.$el);
 			observer.disconnect();
 		}
@@ -173,7 +172,7 @@ export default {
 		playAll() {
 			// this.$store.dispatch('playAllSong', this.list);
 			this.$store.commit(SET_SONGS, this.list);
-			this.$store.commit(PLAY);
+			this.$store.dispatch('playSong', this.list[0]);
 			uni.navigateTo({
 				url: `/pages/song/index`,
 			});
